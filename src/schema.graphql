@@ -1,0 +1,11 @@
+extend type ProductVariant {
+  baseGarmentName: String
+}
+
+extend input ProductVariantInput {
+  baseGarmentName: String
+}
+
+extend type CatalogProductOrVariant {
+  baseGarmentName: String
+}
