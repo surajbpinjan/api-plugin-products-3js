@@ -1,11 +1,32 @@
 extend type ProductVariant {
   baseGarmentName: String
+  baseAvatarName: String
+  baseFabricMaterialName: String
+  fabricBaseMapImage: String
+  fabricNormalMapImage: String
+  fabricSpecularMapImage: String
+  fabricRoughnessValue: Float
+  fabricMetalnessValue: Float
 }
 
 extend input ProductVariantInput {
   baseGarmentName: String
+  baseAvatarName: String
+  baseFabricMaterialName: String
+  fabricBaseMapImage: String
+  fabricNormalMapImage: String
+  fabricSpecularMapImage: String
+  fabricRoughnessValue: Float
+  fabricMetalnessValue: Float
 }
 
-extend type CatalogProductOrVariant {
+extend type CatalogProductVariant {
   baseGarmentName: String
+  baseAvatarName: String
+  baseFabricMaterialName: String
+  fabricBaseMapImage: String
+  fabricNormalMapImage: String
+  fabricSpecularMapImage: String
+  fabricRoughnessValue: Float
+  fabricMetalnessValue: Float
 }

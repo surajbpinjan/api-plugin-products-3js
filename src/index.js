@@ -1,5 +1,5 @@
 import pkg from "../package.json";
-import threejsStartup from "./startup";
+import threejsStartup from "./startup.js";
 import importAsString from "@reactioncommerce/api-utils/importAsString.js";
 const threejsSchema = importAsString("./schema.graphql");
 /**
@@ -27,5 +27,13 @@ function threejsPublishProductToCatalog(catalogProduct, { context, product, shop
   catalogProduct.variants && catalogProduct.variants.map((catalogVariant) => {
     const productVariant = variants.find((variant) => variant._id === catalogVariant.variantId);
     catalogVariant.baseGarmentName = productVariant.baseGarmentName;
+    catalogVariant.baseAvatarName = productVariant.baseAvatarName;
+    catalogVariant.baseFabricMaterialName = productVariant.baseFabricMaterialName;
+    catalogVariant.fabricBaseMapImage = productVariant.fabricBaseMapImage|| null;
+    catalogVariant.fabricNormalMapImage = productVariant.fabricNormalMapImage|| null;
+    catalogVariant.fabricSpecularMapImage = productVariant.fabricSpecularMapImage|| null;
+    catalogVariant.fabricRoughnessValue = productVariant.fabricRoughnessValue;
+    catalogVariant.fabricMetalnessValue = productVariant.fabricMetalnessValue;
   });
- }
+
+}
