@@ -7,6 +7,7 @@ extend type ProductVariant {
   fabricSpecularMapImage: String
   fabricRoughnessValue: Float
   fabricMetalnessValue: Float
+  fabricTextureValue: Float
 }
 
 extend input ProductVariantInput {
@@ -18,6 +19,7 @@ extend input ProductVariantInput {
   fabricSpecularMapImage: String
   fabricRoughnessValue: Float
   fabricMetalnessValue: Float
+  fabricTextureValue: Float
 }
 
 extend type CatalogProductVariant {
@@ -29,4 +31,5 @@ extend type CatalogProductVariant {
   fabricSpecularMapImage: String
   fabricRoughnessValue: Float
   fabricMetalnessValue: Float
+  fabricTextureValue: Float
 }
