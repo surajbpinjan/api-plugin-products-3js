@@ -26,14 +26,15 @@ export default async function register(app) {
 function threejsPublishProductToCatalog(catalogProduct, { context, product, shop, variants }) {
   catalogProduct.variants && catalogProduct.variants.map((catalogVariant) => {
     const productVariant = variants.find((variant) => variant._id === catalogVariant.variantId);
-    catalogVariant.baseGarmentName = productVariant.baseGarmentName;
-    catalogVariant.baseAvatarName = productVariant.baseAvatarName;
+    catalogVariant.baseGarmentName = productVariant.baseGarmentName|| null;
+    catalogVariant.baseAvatarName = productVariant.baseAvatarName|| null;
     catalogVariant.baseFabricMaterialName = productVariant.baseFabricMaterialName;
     catalogVariant.fabricBaseMapImage = productVariant.fabricBaseMapImage|| null;
     catalogVariant.fabricNormalMapImage = productVariant.fabricNormalMapImage|| null;
     catalogVariant.fabricSpecularMapImage = productVariant.fabricSpecularMapImage|| null;
-    catalogVariant.fabricRoughnessValue = productVariant.fabricRoughnessValue;
-    catalogVariant.fabricMetalnessValue = productVariant.fabricMetalnessValue;
+    catalogVariant.fabricRoughnessValue = productVariant.fabricRoughnessValue|| null;
+    catalogVariant.fabricMetalnessValue = productVariant.fabricMetalnessValue|| null;
+    catalogVariant.fabricTextureValue = productVariant.fabricTextureValue|| null;
   });
 
 }

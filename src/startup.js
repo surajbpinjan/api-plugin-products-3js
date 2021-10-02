@@ -3,15 +3,15 @@ export default function threejsStartup(context) {
   const schemaExtension = {
     baseGarmentName: {
       type: String,
-      optional: false
+      optional: true
     },
     baseAvatarName: {
       type: String,
-      optional: false
+      optional: true
     },
     baseFabricMaterialName: {
       type: String,
-      optional: false
+      optional: true
     },
     fabricBaseMapImage: {
       type: String,
@@ -29,13 +29,19 @@ export default function threejsStartup(context) {
       type: Number,
       max: 1,
       min: 0,
-      optional: false
+      optional: true
     },
     fabricMetalnessValue: {
       type: Number,
       max: 1,
       min: 0,
-      optional: false
+      optional: true
+    },
+    fabricTextureValue: {
+      type: Number,
+      max: 0,
+      min: 5,
+      optional: true
     },
   };
   
