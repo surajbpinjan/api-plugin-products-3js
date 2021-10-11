@@ -9,6 +9,10 @@ export default function threejsStartup(context) {
       type: String,
       optional: true
     },
+    avatarGarmentName: {
+      type: String,
+      optional: true
+    },
     baseFabricMaterialName: {
       type: String,
       optional: true

@@ -1,6 +1,7 @@
 extend type ProductVariant {
   baseGarmentName: String
   baseAvatarName: String
+  avatarGarmentName: String
   baseFabricMaterialName: String
   fabricBaseMapImage: String
   fabricNormalMapImage: String
@@ -13,6 +14,7 @@ extend type ProductVariant {
 extend input ProductVariantInput {
   baseGarmentName: String
   baseAvatarName: String
+  avatarGarmentName: String
   baseFabricMaterialName: String
   fabricBaseMapImage: String
   fabricNormalMapImage: String
@@ -25,6 +27,7 @@ extend input ProductVariantInput {
 extend type CatalogProductVariant {
   baseGarmentName: String
   baseAvatarName: String
+  avatarGarmentName: String
   baseFabricMaterialName: String
   fabricBaseMapImage: String
   fabricNormalMapImage: String
@@ -32,4 +35,36 @@ extend type CatalogProductVariant {
   fabricRoughnessValue: Float
   fabricMetalnessValue: Float
   fabricTextureValue: Float
+}
+
+extend type Mutation {
+  generateAndDisplayGarment(input: GenerateAndDisplayGarmentInput!): GenerateAndDisplayGarmentPayload!
+}
+
+input RequestBase {
+  AvatarObjectName: String
+  AvatarBucketName: String
+  GarmentObjectName: String
+  GarmentBucketName: String
+  GarmentAvatarObjectName: String
+  GarmentAvatarBucketName: String
+}
+
+input RequestTarget {
+  AvatarObjectURL: String
+  GarmentAvatarBucketName: String
+  GarmentBucketName: String
+}
+
+input GenerateAndDisplayGarmentInput {
+  base: RequestBase
+  target: RequestTarget
+}
+
+type GenerateAndDisplayGarmentPayload {
+  GarmentAvatarURL: String
+  GarmentAvatarType: String
+  GarmentURL: String
+  GarmentType: String
+  processingTime: String
 }
