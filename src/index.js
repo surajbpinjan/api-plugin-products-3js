@@ -40,6 +40,7 @@ function threejsPublishProductToCatalog(catalogProduct, { context, product, shop
     catalogVariant.fabricMetalnessValue = productVariant.fabricMetalnessValue|| null;
     catalogVariant.fabricTextureValue = productVariant.fabricTextureValue|| null;
     catalogVariant.avatarGarmentName = productVariant.avatarGarmentName|| null;
+    catalogVariant.imageUrls = productVariant.imageUrls|| null;
   });
 
 }

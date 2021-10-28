@@ -43,8 +43,12 @@ export default function threejsStartup(context) {
     },
     fabricTextureValue: {
       type: Number,
-      max: 5,
+      max: 25,
       min: 0,
+      optional: true
+    },
+    imageUrls: {
+      type: String,
       optional: true
     },
   };

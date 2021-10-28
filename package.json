@@ -1,7 +1,7 @@
 {
-  "name": "@thefittingroom/api-plugin-products-3js",
+  "name": "tfr-api-plugin-products-3js",
   "description": "Boilerplate Example plugin for the Reaction API",
-  "version": "0.0.0-development",
+  "version": "1.0.1",
   "main": "index.js",
   "type": "module",
   "engines": {

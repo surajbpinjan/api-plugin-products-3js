@@ -9,6 +9,7 @@ extend type ProductVariant {
   fabricRoughnessValue: Float
   fabricMetalnessValue: Float
   fabricTextureValue: Float
+  imageUrls: String
 }
 
 extend input ProductVariantInput {
@@ -22,6 +23,7 @@ extend input ProductVariantInput {
   fabricRoughnessValue: Float
   fabricMetalnessValue: Float
   fabricTextureValue: Float
+  imageUrls: String
 }
 
 extend type CatalogProductVariant {
@@ -35,6 +37,7 @@ extend type CatalogProductVariant {
   fabricRoughnessValue: Float
   fabricMetalnessValue: Float
   fabricTextureValue: Float
+  imageUrls: String
 }
 
 extend type Mutation {
