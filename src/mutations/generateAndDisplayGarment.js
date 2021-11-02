@@ -52,7 +52,7 @@ async function makeCurlRequest(context, curlDetails) {
   // console.log(`Sending...`);
   // console.log(JSON.stringify(postData));
   const domain = "http://35.192.137.108:3000";
-  const endpoint = "customers";
+  const endpoint = "reformation";
 
   const urlString = `${domain}/${endpoint}`;
 
