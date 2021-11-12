@@ -6,11 +6,11 @@ export default async function generateAndDisplayGarment(parentResult, { input },
   // TODO: decode incoming IDs here
   // No Ids to decode?
 
-  const { GarmentAvatarURL, GarmentAvatarType, GarmentURL, GarmentType, processingTime } = await context.mutations.generateAndDisplayGarment(context, {
+  const { GarmentAvatarURL, GarmentAvatarType, GarmentURL, GarmentType, processingTime, avatars } = await context.mutations.generateAndDisplayGarment(context, {
     base, target
   });
 
   return {
-    GarmentAvatarURL, GarmentAvatarType, GarmentURL, GarmentType, processingTime
+    GarmentAvatarURL, GarmentAvatarType, GarmentURL, GarmentType, processingTime, avatars
   };
 }

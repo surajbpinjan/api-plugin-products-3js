@@ -19,7 +19,7 @@ export default async function generateAndDisplayGarment(context, input) {
 
   const cleanedInput = inputSchema.clean(input); // add default values and such
   inputSchema.validate(cleanedInput);
-  
+
   const { base: base, target: target } = cleanedInput;
   const { accountId, appEvents, collections, getFunctionsOfType, userId } = context;
 
@@ -27,17 +27,20 @@ export default async function generateAndDisplayGarment(context, input) {
   //   throw new ReactionError("access-denied", "Guests cannot create avatars");
   // }
 
-  // create the avatar asset with TFR Avatar Service
-  const curlResponse = await makeCurlRequest(context, { base, target });
+  // fetch Avatars from Account Ids
+  const curlPromise = makeCurlRequest(context, { base, target });
+  
+  var results = await Promise.all([curlPromise]);
 
+  var curlResponse = results[0];
   await appEvents.emit("afterCurlRequest", { createdBy: accountId, curlResponse });
-
   return curlResponse;
+
 }
 
 // TODO: Make this actually call Avatar Service and return a reference ID (and access token?)
 async function makeCurlRequest(context, curlDetails) {
-  
+
   const { base: base, target: target } = curlDetails;
 
   // const opaqueAccountId = encodeAccountOpaqueId(context.accountId);
@@ -52,7 +55,7 @@ async function makeCurlRequest(context, curlDetails) {
   // console.log(`Sending...`);
   // console.log(JSON.stringify(postData));
   const domain = "http://35.192.137.108:3000";
-  const endpoint = "customers";
+  const endpoint = "reformation";
 
   const urlString = `${domain}/${endpoint}`;
 
@@ -72,7 +75,38 @@ async function makeCurlRequest(context, curlDetails) {
       console.error(`${err}`);
     });
 
-  console.log(`Data is: ${JSON.stringify(data)}`);
+  if (data) {
+    // console.log(`Data is: ${JSON.stringify(data)}`);
+    const avatars = await avatarsByAccountId(context);
+    data.avatars = avatars;
+  }
   // @TODO: Use return values from endpoint
   return data;
+
+}
+
+
+async function avatarsByAccountId(context) {
+  const { collections, accountId } = context;
+  const { Avatars } = collections;
+
+  if (!accountId) throw new ReactionError("invalid-param", "You must provide accountId arguments");
+
+  const avatars = await new Promise((resolve, reject) => {
+    Avatars.find({ accountId: accountId }).toArray((err, items) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(items);
+    });
+  });
+
+
+  if (typeof (avatars) !== 'undefined' && avatars != null && avatars.length) {
+    const Hexes = avatars.map(a => a.skinHex);
+    return JSON.stringify(Hexes);
+  } else {
+    return JSON.stringify([]);
+  }
+
 }
