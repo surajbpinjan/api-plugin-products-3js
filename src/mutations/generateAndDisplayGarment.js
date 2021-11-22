@@ -19,7 +19,7 @@ export default async function generateAndDisplayGarment(context, input) {
 
   const cleanedInput = inputSchema.clean(input); // add default values and such
   inputSchema.validate(cleanedInput);
-  
+
   const { base: base, target: target } = cleanedInput;
   const { accountId, appEvents, collections, getFunctionsOfType, userId } = context;
 
@@ -27,17 +27,26 @@ export default async function generateAndDisplayGarment(context, input) {
   //   throw new ReactionError("access-denied", "Guests cannot create avatars");
   // }
 
-  // create the avatar asset with TFR Avatar Service
-  const curlResponse = await makeCurlRequest(context, { base, target });
+  // fetch Avatars from Account Ids
+  const curlPromise = makeCurlRequest(context, { base, target });
+  const avatars = avatarsByAccountId(context);
 
+  var results = await Promise.all([curlPromise, avatars]);
+
+  if (results[0]) {
+    var curlResponse = results[0];
+    curlResponse.avatars = results[1];
+  }
+
+  var curlResponse = results[0];
   await appEvents.emit("afterCurlRequest", { createdBy: accountId, curlResponse });
-
   return curlResponse;
+
 }
 
 // TODO: Make this actually call Avatar Service and return a reference ID (and access token?)
 async function makeCurlRequest(context, curlDetails) {
-  
+
   const { base: base, target: target } = curlDetails;
 
   // const opaqueAccountId = encodeAccountOpaqueId(context.accountId);
@@ -60,19 +69,52 @@ async function makeCurlRequest(context, curlDetails) {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
-      // "Content-Type": "application/x-www-form-urlencoded"
-      // "Content-Type": "multipart/form-data"
     },
     body: JSON.stringify(postData)
-    // body: formData
-  })
-    .then((res) => res.json())
-    // .then((data) => console.log(JSON.stringify(data)))
-    .catch((err) => {
-      console.error(`${err}`);
-    });
+  }).catch((err) => {
+    console.error(`${err}`);
+  });
 
-  console.log(`Data is: ${JSON.stringify(data)}`);
+  try {
+    const dataJSON = await data.JSON();
+    return dataJSON;
+  } catch (error) {
+    console.log("*******Error parsing response to json.returning {}******");
+    console.log("resonse::::::" + await data.text());
+    return {};
+  }
+
   // @TODO: Use return values from endpoint
-  return data;
+  console.log("curl repsonse:::" + dataJSON);
+  console.log("curl repsonse to string:::" + dataJSON.toString());
+  // console.log("curl repsonse strigified:::" + JSON.stringify(dataJSON));
+
+  // return data;
+
+}
+
+
+async function avatarsByAccountId(context) {
+  const { collections, accountId } = context;
+  const { Avatars } = collections;
+
+  if (!accountId) throw new ReactionError("invalid-param", "You must provide accountId arguments");
+
+  const avatars = await new Promise((resolve, reject) => {
+    Avatars.find({ accountId: accountId }).toArray((err, items) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(items);
+    });
+  });
+
+
+  if (typeof (avatars) !== 'undefined' && avatars != null && avatars.length) {
+    const Hexes = avatars.map(a => a.skinHex);
+    return JSON.stringify(Hexes);
+  } else {
+    return JSON.stringify([]);
+  }
+
 }

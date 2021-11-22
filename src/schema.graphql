@@ -70,4 +70,5 @@ type GenerateAndDisplayGarmentPayload {
   GarmentURL: String
   GarmentType: String
   processingTime: String
+  avatars: String
 }
