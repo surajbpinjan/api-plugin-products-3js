@@ -29,8 +29,14 @@ export default async function generateAndDisplayGarment(context, input) {
 
   // fetch Avatars from Account Ids
   const curlPromise = makeCurlRequest(context, { base, target });
-  
-  var results = await Promise.all([curlPromise]);
+  const avatars = avatarsByAccountId(context);
+
+  var results = await Promise.all([curlPromise, avatars]);
+
+  if (results[0]) {
+    var curlResponse = results[0];
+    curlResponse.avatars = results[1];
+  }
 
   var curlResponse = results[0];
   await appEvents.emit("afterCurlRequest", { createdBy: accountId, curlResponse });
@@ -63,25 +69,27 @@ async function makeCurlRequest(context, curlDetails) {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
-      // "Content-Type": "application/x-www-form-urlencoded"
-      // "Content-Type": "multipart/form-data"
     },
     body: JSON.stringify(postData)
-    // body: formData
-  })
-    .then((res) => res.json())
-    // .then((data) => console.log(JSON.stringify(data)))
-    .catch((err) => {
-      console.error(`${err}`);
-    });
+  }).catch((err) => {
+    console.error(`${err}`);
+  });
 
-  if (data) {
-    // console.log(`Data is: ${JSON.stringify(data)}`);
-    const avatars = await avatarsByAccountId(context);
-    data.avatars = avatars;
+  try {
+    const dataJSON = await data.JSON();
+    return dataJSON;
+  } catch (error) {
+    console.log("*******Error parsing response to json.returning {}******");
+    console.log("resonse::::::" + await data.text());
+    return {};
   }
+
   // @TODO: Use return values from endpoint
-  return data;
+  console.log("curl repsonse:::" + dataJSON);
+  console.log("curl repsonse to string:::" + dataJSON.toString());
+  // console.log("curl repsonse strigified:::" + JSON.stringify(dataJSON));
+
+  // return data;
 
 }
 
