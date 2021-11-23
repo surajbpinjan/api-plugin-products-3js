@@ -63,7 +63,7 @@ async function makeCurlRequest(context, curlDetails) {
   const domain = "http://35.192.137.108:3000";
   const endpoint = "reformation";
 
-  const urlString = `${domain}/${endpoint}`;
+  const urlString = `${domain}/${endpoint}/`;
 
   const data = await fetch(urlString, {
     method: "POST",
@@ -71,16 +71,16 @@ async function makeCurlRequest(context, curlDetails) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify(postData)
+    // body: JSON.stringify(dummyRequestJSON)
   }).catch((err) => {
     console.error(`${err}`);
   });
 
   try {
-    const dataJSON = await data.JSON();
+    const dataJSON = await data.json();
     return dataJSON;
   } catch (error) {
-    console.log("*******Error parsing response to json.returning {}******");
-    console.log("resonse::::::" + await data.text());
+    console.log("*******Error parsing response to json.returning ******");
     return {};
   }
 
