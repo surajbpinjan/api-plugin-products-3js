@@ -111,8 +111,7 @@ async function avatarsByAccountId(context) {
 
 
   if (typeof (avatars) !== 'undefined' && avatars != null && avatars.length) {
-    const Hexes = avatars.map(a => a.skinHex);
-    return JSON.stringify(Hexes);
+    return JSON.stringify(avatars.reverse());
   } else {
     return JSON.stringify([]);
   }
