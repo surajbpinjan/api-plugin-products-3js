@@ -1,10 +1,6 @@
-import SimpleSchema from "simpl-schema";
 import ReactionError from "@reactioncommerce/reaction-error";
-import Random from "@reactioncommerce/random";
-import Logger from "@reactioncommerce/logger";
-import { generateAndDisplayGarmentInputSchema } from "../simpleSchemas.js";
 import fetch from "node-fetch";
-import FormData from "form-data";
+import { generateAndDisplayGarmentInputSchema } from "../simpleSchemas.js";
 
 const inputSchema = generateAndDisplayGarmentInputSchema;
 
@@ -28,29 +24,33 @@ export default async function generateAndDisplayGarment(context, input) {
   // }
 
   // fetch Avatars from Account Ids
-  const curlPromise = makeCurlRequest(context, { base, target });
-  const avatars = avatarsByAccountId(context);
+  const avatars = await avatarsByAccountId(context);
 
-  var results = await Promise.all([curlPromise, avatars]);
+  var curlResponse = await makeCurlRequest(avatars, context, { base, target });
 
-  if (results[0]) {
-    var curlResponse = results[0];
-    curlResponse.avatars = results[1];
-  }
+  const AvatarHexes = avatars.map(a => a.skinHex);
 
-  var curlResponse = results[0];
+  curlResponse.avatars = JSON.stringify(AvatarHexes);
+  // await appEvents.emit("afterCurlRequest", { createdBy: accountId, curlResponse });
   await appEvents.emit("afterCurlRequest", { createdBy: accountId, curlResponse });
   return curlResponse;
 
 }
 
 // TODO: Make this actually call Avatar Service and return a reference ID (and access token?)
-async function makeCurlRequest(context, curlDetails) {
+async function makeCurlRequest(avatars, context, curlDetails) {
 
-  const { base: base, target: target } = curlDetails;
+  var { base: base, target: target } = curlDetails;
 
   // const opaqueAccountId = encodeAccountOpaqueId(context.accountId);
   // const opaqueAvatarId = encodeAvatarOpaqueId(_id);
+
+  if (avatars.length > 0) {
+    const latestAvatarData = avatars[0];
+    if (latestAvatarData.modelUrl && latestAvatarData.modelUrl != null && latestAvatarData.modelUrl != "") {
+      target.AvatarObjectURL = latestAvatarData.modelUrl;
+    }
+  }
 
   // @TODO: User real userId and sessionToken
   const postData = {
@@ -111,9 +111,9 @@ async function avatarsByAccountId(context) {
 
 
   if (typeof (avatars) !== 'undefined' && avatars != null && avatars.length) {
-    return JSON.stringify(avatars.reverse());
+    return avatars.reverse();
   } else {
-    return JSON.stringify([]);
+    return [];
   }
 
 }
