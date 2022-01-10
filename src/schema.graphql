@@ -72,3 +72,22 @@ type GenerateAndDisplayGarmentPayload {
   processingTime: String
   avatars: String
 }
+
+extend type Mutation {
+  generateVideoNImages(input: GenerateVideoNImagesInput!): GenerateVideoNImagesPayload!
+}
+
+input GenerateVideoNImagesInput {
+  garment_system_name: String,
+  user_name: String,
+  color_value: Float,
+  render_frame1: Float,
+  render_frame2: Float,
+  render_frame3: Float,
+  render_frame4: Float
+}
+
+type GenerateVideoNImagesPayload {
+  image: [String]
+  video: String
+}
