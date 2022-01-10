@@ -31,7 +31,6 @@ export default async function generateAndDisplayGarment(context, input) {
   const AvatarHexes = avatars.map(a => a.skinHex);
 
   curlResponse.avatars = JSON.stringify(AvatarHexes);
-
   // await appEvents.emit("afterCurlRequest", { createdBy: accountId, curlResponse });
   await appEvents.emit("afterCurlRequest", { createdBy: accountId, curlResponse });
   return curlResponse;
