@@ -77,17 +77,54 @@ extend type Mutation {
   generateVideoNImages(input: GenerateVideoNImagesInput!): GenerateVideoNImagesPayload!
 }
 
+extend type Mutation {
+  generateVideoNImagesObj(input: GenerateVideoNImagesInput!): GenerateVideoNImagesPayload!
+}
+
 input GenerateVideoNImagesInput {
   garment_system_name: String,
+  hex_value: String,
   user_name: String,
   color_value: Float,
-  render_frame1: Float,
-  render_frame2: Float,
-  render_frame3: Float,
-  render_frame4: Float
+  #   fps: Float,
+  # time: Float,
+  # render_frame1: Float,
+  # render_frame2: Float,
+  #   render_frame3: Float,
+  #   render_frame4: Float,
+  #   render_frame5: Float,
+  #   render_frame6: Float,
+  #   render_frame7: Float,
+  #   render_frame8: Float,
+  #   render_frame9: Float,
+  #   render_frame10: Float,
+  #   render_frame11: Float,
+  #   render_frame12: Float,
+  #   render_frame13: Float,
+  #   render_frame14: Float,
+  #   render_frame15: Float,
+  #   render_frame16: Float,
+  #   render_frame17: Float,
+  #   render_frame18: Float,
+  #   render_frame19: Float,
+  #   render_frame20: Float,
+  #   render_frame21: Float,
+  #   render_frame22: Float,
+  #   render_frame23: Float,
+  #   render_frame24: Float,
+  #   render_frame25: Float,
+  #   render_frame26: Float,
+  #   render_frame27: Float,
+  #   render_frame28: Float,
+  #   render_frame29: Float,
+  #   render_frame30: Float
 }
 
 type GenerateVideoNImagesPayload {
   image: [String]
   video: String
+}
+
+extend type Query {
+  getAvatar: Avatar
 }
