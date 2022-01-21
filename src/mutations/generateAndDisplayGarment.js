@@ -65,31 +65,24 @@ async function makeCurlRequest(avatars, context, curlDetails) {
 
   const urlString = `${domain}/${endpoint}/`;
 
-  const data = await fetch(urlString, {
+  const dataJSON = await fetch(urlString, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify(postData)
-    // body: JSON.stringify(dummyRequestJSON)
+  }).then((res) => {
+    if (!res.ok) {
+      console.log("========>STATUS NOT OK" + res.statusText);
+      throw Error(res.statusText);
+    }
+    return res.json();
   }).catch((err) => {
+    console.log("========>THROWN ERROR" + err);
     console.error(`${err}`);
   });
 
-  try {
-    const dataJSON = await data.json();
-    return dataJSON;
-  } catch (error) {
-    console.log("*******Error parsing response to json.returning ******");
-    return {};
-  }
-
-  // @TODO: Use return values from endpoint
-  console.log("curl repsonse:::" + dataJSON);
-  console.log("curl repsonse to string:::" + dataJSON.toString());
-  // console.log("curl repsonse strigified:::" + JSON.stringify(dataJSON));
-
-  // return data;
+  return dataJSON ? dataJSON : {};
 
 }
 
