@@ -25,21 +25,19 @@ export default async function generateVideoNImagesObj(context, input) {
     hex_value: hex_value,
   } = cleanedInput;
   const { accountId, appEvents, collections, getFunctionsOfType, userId } = context;
-  console.log("🚀 ~ file: generateVideoNImages.js ~ line 60 ~ generateVideoNImages ~ accountId", accountId)
   const { Avatars } = collections;
 
-  var userAvatar = await Avatars.findOne({ accountId: accountId });
+  var userAvatar = await Avatars.findOne({ accountId: accountId }, { sort: { updatedAt: -1 } });
 
-  const garmentSystemName = (userAvatar && userAvatar.modelUrl) ? userAvatar.modelUrl : garment_system_name;
-  console.log("🚀 ~ file: generateVideoNImagesObj.js ~ line 34 ~ generateVideoNImagesObj ~ garmentSystemName", garmentSystemName)
+  const isModelUrl = (userAvatar != null) && (userAvatar.modelUrl != null) && (userAvatar.modelUrl.length > 0);
+  const garmentSystemName = isModelUrl ? userAvatar.modelUrl : garment_system_name;
 
   var curlResponse = await makeCurlRequest(context, {
-    garment_system_name:garmentSystemName,
+    garment_system_name: garmentSystemName,
     user_name,
     color_value,
     hex_value,
   });
-  console.log("🚀 ~ file: generateVideoNImages.js ~ line 102 ~ generateVideoNImages ~ curlResponse", curlResponse.video);
 
   if (userAvatar) {
     await Avatars.updateMany({ accountId: accountId }, { $set: { videoUrlObj: curlResponse.video, imageObj: curlResponse.images, updatedAt: now.toString() } });

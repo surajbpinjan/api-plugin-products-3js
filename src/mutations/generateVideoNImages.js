@@ -60,7 +60,11 @@ export default async function generateVideoNImages(context, input) {
   console.log("🚀 ~ file: generateVideoNImages.js ~ line 60 ~ generateVideoNImages ~ accountId", accountId)
   const { Avatars } = collections;
 
-  var userAvatar = await Avatars.findOne({ accountId: accountId });
+  var userAvatar = await Avatars.findOne({ accountId: accountId }, { sort: { updatedAt: -1 } });
+
+  const isFbxUrl = (userAvatar != null) && (userAvatar.fbx != null) && (userAvatar.fbx.length > 0);
+  const garmentSystemName = isFbxUrl ? userAvatar.fbx : garment_system_name;
+  console.log("🚀 ~ file: generateVideoNImages.js ~ line 67 ~ generateVideoNImages ~ garmentSystemName", garmentSystemName)
 
   var curlResponse = await makeCurlRequest( context, { 
     garment_system_name, 

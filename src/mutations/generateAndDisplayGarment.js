@@ -18,7 +18,7 @@ export default async function generateAndDisplayGarment(context, input) {
 
   const { base: base, target: target } = cleanedInput;
   const { accountId, appEvents, collections, getFunctionsOfType, userId } = context;
-
+  const { Avatars } = collections;
   // if (!userId) {
   //   throw new ReactionError("access-denied", "Guests cannot create avatars");
   // }
@@ -27,6 +27,20 @@ export default async function generateAndDisplayGarment(context, input) {
   const avatars = await avatarsByAccountId(context);
 
   var curlResponse = await makeCurlRequest(avatars, context, { base, target });
+
+  console.log("🚀 ~ file: generateAndDisplayGarment.js ~ line 30 ~ generateAndDisplayGarment ~ curlResponse", curlResponse);
+
+  // if fbx is returned update all avatars
+
+  if (curlResponse && curlResponse.GarmentAvatarURL) {
+    await Avatars.updateMany({ accountId: accountId },
+      {
+        $set: {
+          fbx: curlResponse.GarmentAvatarURL,
+        }
+      },
+      { upsert: true });
+  }
 
   const AvatarHexes = avatars.map(a => a.skinHex);
 
