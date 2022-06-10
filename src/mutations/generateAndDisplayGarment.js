@@ -16,9 +16,10 @@ export default async function generateAndDisplayGarment(context, input) {
   const cleanedInput = inputSchema.clean(input); // add default values and such
   inputSchema.validate(cleanedInput);
 
-  const { base: base, target: target } = cleanedInput;
+  const { base: base, target: target, userinfo: userinfo } = cleanedInput;
   const { accountId, appEvents, collections, getFunctionsOfType, userId } = context;
   const { Avatars } = collections;
+  console.log("🚀 ~ file: generateAndDisplayGarment.js ~ line 21 ~ generateAndDisplayGarment ~ accountId", accountId)
   // if (!userId) {
   //   throw new ReactionError("access-denied", "Guests cannot create avatars");
   // }
@@ -26,17 +27,20 @@ export default async function generateAndDisplayGarment(context, input) {
   // fetch Avatars from Account Ids
   const avatars = await avatarsByAccountId(context);
 
-  var curlResponse = await makeCurlRequest(avatars, context, { base, target });
+  var curlResponse = await makeCurlRequest(avatars, context, { base, target, userinfo });
 
-  console.log("🚀 ~ file: generateAndDisplayGarment.js ~ line 30 ~ generateAndDisplayGarment ~ curlResponse", curlResponse);
+  curlResponse = JSON.parse(curlResponse);
+  curlResponse.image = curlResponse.images;
 
-  // if fbx is returned update all avatars
+  // if fbx is returned video
 
-  if (curlResponse && curlResponse.GarmentAvatarURL) {
+  if (curlResponse && curlResponse.video) {
     await Avatars.updateMany({ accountId: accountId },
       {
         $set: {
-          fbx: curlResponse.GarmentAvatarURL,
+          videoUrl: curlResponse.video,
+          reverseUrl: curlResponse.reverse,
+          image: curlResponse.images
         }
       },
       { upsert: true });
@@ -54,7 +58,7 @@ export default async function generateAndDisplayGarment(context, input) {
 // TODO: Make this actually call Avatar Service and return a reference ID (and access token?)
 async function makeCurlRequest(avatars, context, curlDetails) {
 
-  var { base: base, target: target } = curlDetails;
+  var { base: base, target: target, userinfo: userinfo } = curlDetails;
 
   // const opaqueAccountId = encodeAccountOpaqueId(context.accountId);
   // const opaqueAvatarId = encodeAvatarOpaqueId(_id);
@@ -69,13 +73,14 @@ async function makeCurlRequest(avatars, context, curlDetails) {
   // @TODO: User real userId and sessionToken
   const postData = {
     base,
-    target
+    target,
+    userinfo
   };
 
   // console.log(`Sending...`);
   // console.log(JSON.stringify(postData));
-  const domain = "http://35.192.137.108:3000";
-  const endpoint = "reformation";
+  const domain = "http://35.225.47.184:8000";
+  const endpoint = "reformation_to_rendering";
 
   const urlString = `${domain}/${endpoint}/`;
 

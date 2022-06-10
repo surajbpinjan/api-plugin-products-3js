@@ -15,11 +15,24 @@ const RequestTarget = new SimpleSchema({
   "GarmentBucketName": String
 });
 
+const UserInfo = new SimpleSchema({
+  user_name: String,
+  color_value: Number,
+  hex_value: String,
+  number_of_messages: Number
+});
+
 export const requestSender = new SimpleSchema({
   "garment_system_name": String,
   "user_name": String,
   "hex_value": String,
   "color_value": Number,
+  "number_of_messages": Number,
+  "useCache": {
+    type: Boolean,
+    optional: true,
+    defaultValue: false
+  }
   // "fps": Number,
   // "time": Number,
   // "render_frame1": Number,
@@ -56,7 +69,8 @@ export const requestSender = new SimpleSchema({
 
 export const generateAndDisplayGarmentInputSchema = new SimpleSchema({
   "base": RequestBase,
-  "target": RequestTarget
+  "target": RequestTarget,
+  "userinfo": UserInfo
 });
 
 export const Avatar = new SimpleSchema({
@@ -68,6 +82,7 @@ export const Avatar = new SimpleSchema({
   accountId: String,
   skinHex: String,
   videoUrl: String,
+  reverse: String,
   image: [String],
   videoUrlObj: String,
   imageObj: [String],

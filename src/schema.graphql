@@ -62,15 +62,30 @@ input RequestTarget {
 input GenerateAndDisplayGarmentInput {
   base: RequestBase
   target: RequestTarget
+  userinfo: UserInfo
 }
 
+input UserInfo {
+    user_name: String,
+    color_value: Float = 0.9,
+    hex_value: String = "5a4b34",
+    number_of_messages: Float = 36.0
+}
+
+# type GenerateAndDisplayGarmentPayload {
+#   GarmentAvatarURL: String
+#   GarmentAvatarType: String
+#   GarmentURL: String
+#   GarmentType: String
+#   processingTime: String
+#   avatars: String
+# }
+
 type GenerateAndDisplayGarmentPayload {
-  GarmentAvatarURL: String
-  GarmentAvatarType: String
-  GarmentURL: String
-  GarmentType: String
-  processingTime: String
-  avatars: String
+  image: [String]
+  video: String
+  reverse: String
+  status: String
 }
 
 extend type Mutation {
@@ -86,6 +101,8 @@ input GenerateVideoNImagesInput {
   hex_value: String,
   user_name: String,
   color_value: Float,
+  number_of_messages: Float,
+  useCache: Boolean = false,
   #   fps: Float,
   # time: Float,
   # render_frame1: Float,
@@ -123,6 +140,8 @@ input GenerateVideoNImagesInput {
 type GenerateVideoNImagesPayload {
   image: [String]
   video: String
+  reverse: String
+  status: String
 }
 
 extend type Query {

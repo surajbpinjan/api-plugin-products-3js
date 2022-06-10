@@ -1,11 +1,13 @@
 
 export default async function generateVideoNImages(parentResult, { input }, context) {
 
-  const { 
-    garment_system_name: garment_system_name, 
-    user_name: user_name, 
-    color_value: color_value, 
+  const {
+    garment_system_name: garment_system_name,
+    user_name: user_name,
+    color_value: color_value,
     hex_value: hex_value,
+    number_of_messages: number_of_messages,
+    useCache: useCache,
     // fps: fps,
     // time: time,
     // render_frame1: render_frame1,
@@ -40,11 +42,13 @@ export default async function generateVideoNImages(parentResult, { input }, cont
     // render_frame30: render_frame30,
   } = input;
 
-  const { image, video } = await context.mutations.generateVideoNImages(context, { 
-    garment_system_name, 
-    user_name, 
-    color_value, 
+  const { image, video, reverse, status } = await context.mutations.generateVideoNImages(context, {
+    garment_system_name,
+    user_name,
+    color_value,
     hex_value,
+    number_of_messages,
+    useCache,
     // fps,
     // time,
     // render_frame1,
@@ -79,5 +83,5 @@ export default async function generateVideoNImages(parentResult, { input }, cont
     // render_frame30,
   });
 
-  return { image, video };
+  return { image, video, reverse, status };
 }

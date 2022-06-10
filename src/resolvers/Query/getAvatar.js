@@ -19,7 +19,10 @@ export default async function getAvatar(parentResult, args, context) {
     textureUrl: avatar ? avatar.textureUrl : null,
     skinHex: avatar ? avatar.skinHex : "#5F3A2C",
     videoUrl: avatar ? avatar.videoUrl : null,
-    _id: avatar ? encodeAvatarOpaqueId(avatar._id) : null
+    videoUrlObj: avatar ? avatar.videoUrlObj : null,
+    _id: avatar ? encodeAvatarOpaqueId(avatar._id) : null,
+    image: avatar ? avatar.image : null,
+    reverseUrl: avatar ? avatar.reverseUrl : null,
   };
 
 }

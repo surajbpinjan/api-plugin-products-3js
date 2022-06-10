@@ -1,7 +1,7 @@
 {
   "name": "tfr-api-plugin-products-3js",
   "description": "Boilerplate Example plugin for the Reaction API",
-  "version": "1.2.1",
+  "version": "1.3.4",
   "main": "index.js",
   "type": "module",
   "engines": {

@@ -10,6 +10,7 @@ import ReactionError from "@reactioncommerce/reaction-error";
  */
 export default async function getAvatar(context) {
   const { accountId } = context;
+  console.log("🚀 ~ file: getAvatar.js ~ line 13 ~ getAvatar ~ accountId", accountId)
   const matchingAvatars = await avatarsByAccountId(context);
 
   if (matchingAvatars.length > 0) {

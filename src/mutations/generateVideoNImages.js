@@ -12,17 +12,19 @@ const inputSchema = requestSender;
  * @returns {Promise<Object>} Object with `avatar` property containing the created avatar
  */
 export default async function generateVideoNImages(context, input) {
-
+  var status = "SUCCESS";
   const cleanedInput = inputSchema.clean(input); // add default values and such
   inputSchema.validate(cleanedInput);
 
   const now = new Date();
 
-  const { 
-    garment_system_name: garment_system_name, 
-    user_name: user_name, 
-    color_value: color_value, 
+  const {
+    garment_system_name: garment_system_name,
+    user_name: user_name,
+    color_value: color_value,
     hex_value: hex_value,
+    number_of_messages: number_of_messages,
+    useCache: useCache,
     // fps: fps,
     // time: time,
     // render_frame1: render_frame1, 
@@ -62,15 +64,31 @@ export default async function generateVideoNImages(context, input) {
 
   var userAvatar = await Avatars.findOne({ accountId: accountId }, { sort: { updatedAt: -1 } });
 
+
+  if (useCache && userAvatar && userAvatar.image
+    && (userAvatar.image != null)
+    && userAvatar.image.length > 0) {
+    var curlResponse = {
+      image: userAvatar.image,
+      video: userAvatar.videoUrl,
+      reverse: userAvatar.reverseUrl,
+      status: "SUCCESS"
+    };
+    await appEvents.emit("afterCurlRequest", { createdBy: accountId, curlResponse });
+    return curlResponse;
+  }
+
   const isFbxUrl = (userAvatar != null) && (userAvatar.fbx != null) && (userAvatar.fbx.length > 0);
   const garmentSystemName = isFbxUrl ? userAvatar.fbx : garment_system_name;
   console.log("🚀 ~ file: generateVideoNImages.js ~ line 67 ~ generateVideoNImages ~ garmentSystemName", garmentSystemName)
 
-  var curlResponse = await makeCurlRequest( context, { 
-    garment_system_name, 
-    user_name, 
-    color_value, 
+  var curlResponse = await makeCurlRequest(context, {
+    garment_system_name,
+    user_name,
+    color_value,
     hex_value,
+    number_of_messages,
+    useCache,
     // fps,
     // time,
     // render_frame1,
@@ -104,6 +122,7 @@ export default async function generateVideoNImages(context, input) {
     // render_frame29,
     // render_frame30,
   });
+  console.log("🚀 ~ file: generateVideoNImages.js ~ line 110 ~ generateVideoNImages ~ curlResponse", curlResponse);
   console.log("🚀 ~ file: generateVideoNImages.js ~ line 102 ~ generateVideoNImages ~ curlResponse", curlResponse.video);
 
   if (userAvatar) {
@@ -117,13 +136,14 @@ export default async function generateVideoNImages(context, input) {
 }
 
 // TODO: Make this actually call Avatar Service and return a reference ID (and access token?)
-async function makeCurlRequest( context, curlDetails) {
+async function makeCurlRequest(context, curlDetails) {
 
-  var { 
-    garment_system_name: garment_system_name, 
-    user_name: user_name, 
+  var {
+    garment_system_name: garment_system_name,
+    user_name: user_name,
     color_value: color_value,
     hex_value: hex_value,
+    number_of_messages: number_of_messages,
     // fps: fps,
     // time: time,
     // render_frame1: render_frame1,
@@ -159,10 +179,11 @@ async function makeCurlRequest( context, curlDetails) {
   } = curlDetails;
 
   // @TODO: User real userId and sessionToken
-  const postData = { 
-    garment_system_name, 
-    user_name, color_value, 
+  const postData = {
+    garment_system_name,
+    user_name, color_value,
     hex_value,
+    number_of_messages,
     // fps,
     // time,
     // render_frame1,
@@ -197,8 +218,8 @@ async function makeCurlRequest( context, curlDetails) {
     // render_frame30,
   };
 
-  const domain = "http://34.122.241.226:8000";
-  const endpoint = "fbx_process";
+  const domain = "http://34.136.23.4:8000";
+  const endpoint = "render_controller";
 
   const urlString = `${domain}/${endpoint}/`;
 
@@ -221,9 +242,10 @@ async function makeCurlRequest( context, curlDetails) {
   if (dataJSON) {
     var parsedData = JSON.parse(JSON.parse(dataJSON));
     parsedData.image = parsedData.images;
+    parsedData.status = "SUCCESS";
     return parsedData;
   } else {
-    return {}
+    return { status: "REQUEST_FAILED" }
   }
 
 }

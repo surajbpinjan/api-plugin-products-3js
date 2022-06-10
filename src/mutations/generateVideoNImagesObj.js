@@ -23,6 +23,7 @@ export default async function generateVideoNImagesObj(context, input) {
     user_name: user_name,
     color_value: color_value,
     hex_value: hex_value,
+    number_of_messages: number_of_messages,
   } = cleanedInput;
   const { accountId, appEvents, collections, getFunctionsOfType, userId } = context;
   const { Avatars } = collections;
@@ -37,6 +38,7 @@ export default async function generateVideoNImagesObj(context, input) {
     user_name,
     color_value,
     hex_value,
+    number_of_messages,
   });
 
   if (userAvatar) {
@@ -57,6 +59,7 @@ async function makeCurlRequest(context, curlDetails) {
     user_name: user_name,
     color_value: color_value,
     hex_value: hex_value,
+    number_of_messages: number_of_messages
   } = curlDetails;
 
   // @TODO: User real userId and sessionToken
@@ -65,12 +68,13 @@ async function makeCurlRequest(context, curlDetails) {
     user_name, 
     color_value,
     hex_value,
+    number_of_messages
   };
 
   console.log("🚀 ~ file: generateVideoNImagesObj.js ~ line 66 ~ makeCurlRequest ~ postData", postData)
 
   const domain = "http://34.122.241.226:8000";
-  const endpoint = "obj_process";
+  const endpoint = "render_controller";
 
   const urlString = `${domain}/${endpoint}/`;
 
